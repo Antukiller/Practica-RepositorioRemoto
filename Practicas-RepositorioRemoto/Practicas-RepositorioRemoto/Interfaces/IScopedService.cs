@@ -1,0 +1,3 @@
+﻿namespace Practicas_RepositorioRemoto.Interfaces;
+
+public interface IScopedService;

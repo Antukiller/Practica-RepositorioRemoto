@@ -3,6 +3,6 @@
 public record User(
     int Id,
     string Name,
-    string UserName,
+    string Username,
     string Email
 );

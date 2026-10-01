@@ -1,6 +1,6 @@
 ﻿namespace Practicas_RepositorioRemoto.Dto.ModelDto;
 
-public class GeoDto (
+public record GeoDto (
     string Lat,
     string Lng
     );

@@ -1,8 +1,7 @@
-﻿using Practicas_RepositorioRemoto.Dto.ModelDto;
+﻿namespace Practicas_RepositorioRemoto.Dto.ModelDto;
 
-namespace Practicas_RepositorioRemoto.Dto;
-
-public record CreateUserRequest(
+public record UserDto (
+    int Id,
     string Name,
     string UserName,
     string Email,
@@ -10,4 +9,4 @@ public record CreateUserRequest(
     string Phone,
     string Website,
     CompanyDto Company
-    );
+);

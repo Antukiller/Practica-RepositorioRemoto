@@ -4,6 +4,5 @@ public record CompanyDto (
     string Street,
     string Suite,
     string City,
-    string ZipCode, 
-    GeoDto Geo
-);
+    string ZipCode
+    );

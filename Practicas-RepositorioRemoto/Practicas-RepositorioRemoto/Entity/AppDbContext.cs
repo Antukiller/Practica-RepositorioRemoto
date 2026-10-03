@@ -7,7 +7,6 @@ public class AppDbContext : DbContext {
     public DbSet<User> Users => Set<User>();
     
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<User>(entity => {
             entity.ToTable("tbl_user");
@@ -16,6 +15,7 @@ public class AppDbContext : DbContext {
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(20);
+
             entity.Property(e => e.UserName)
                 .IsRequired()
                 .HasMaxLength(20);
@@ -30,14 +30,13 @@ public class AppDbContext : DbContext {
 
             entity.Property(e => e.Website)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(250);
 
             entity.OwnsOne(e => e.Address, address => {
                 address.ToJson();
                 address.OwnsOne(e => e.Geo);
             });
-            entity.Property(e => e.Website)
-                .HasMaxLength(250);
+
             entity.OwnsOne(e => e.Company, company => {
                 company.ToJson();
             });

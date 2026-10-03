@@ -32,8 +32,4 @@
       <PackageReference Include="System.Reactive" Version="7.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Repositories\" />
-    </ItemGroup>
-
 </Project>

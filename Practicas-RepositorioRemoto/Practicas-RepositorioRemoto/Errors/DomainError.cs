@@ -16,4 +16,6 @@ public record DomainError {
     ///  Error en la comunicacion con la api
     /// </summary>
     public sealed record ApiError(int statusCode, string errorMessage) : DomainError;
+    
+    public sealed record DatabaseError(string errorMessage) : DomainError;
 }

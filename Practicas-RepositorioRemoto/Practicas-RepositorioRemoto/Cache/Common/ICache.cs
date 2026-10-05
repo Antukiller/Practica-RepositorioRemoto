@@ -21,4 +21,17 @@ public interface ICache
 
     /// <summary>Elimina todos los valores de la caché.</summary>
     Task RemoveAllAsync();
+
+    /// <summary>
+    /// Añade una clave al índice de claves propias. Permite recuperar las claves
+    /// insertadas sin depender del formato con el que se construyeron.
+    /// </summary>
+    /// <param name="key">Clave a indexar.</param>
+    Task AddToIndexAsync(string key);
+
+    /// <summary>
+    /// Devuelve las claves propias que están indexadas.
+    /// </summary>
+    /// <returns>Las claves indexadas, o una colección vacía si no hay ninguna.</returns>
+    Task<IReadOnlyCollection<string>> GetIndexedKeysAsync();
 }

@@ -11,13 +11,19 @@ namespace Practicas_RepositorioRemoto.Cache;
 /// </summary>
 /// <param name="redis">Multiplexor de conexiones a Redis</param>
 /// <param name="keyPrefix">Prefijo que identifica las claves propias de la aplicación</param>
-/// <remarks>
-/// Todas las operaciones son "fail-soft": si Redis falla se registra el error y se
-/// devuelve el valor por defecto, porque la caché no debe provocar un fallo de la API.
-/// </remarks>
 public class RedisCache(IConnectionMultiplexer redis, string keyPrefix = "users:") : ICache, IScopedService
 {
     private readonly ILogger _logger = Log.ForContext<RedisCache>();
+
+    /// <summary>
+    /// Clave del conjunto (SET) donde se indexan las claves propias.
+    /// </summary>
+    private string IndexKey => GetPrefixedKey("ids");
+
+    /// <summary>
+    /// Formatea la clave para asegurar que siempre incluya el prefijo.
+    /// </summary>
+    private string GetPrefixedKey(string key) => key.StartsWith(keyPrefix) ? key : $"{keyPrefix}{key}";
 
     /// <inheritdoc />
     public async Task<T?> GetAsync<T>(string key)
@@ -25,7 +31,8 @@ public class RedisCache(IConnectionMultiplexer redis, string keyPrefix = "users:
         try
         {
             var db = redis.GetDatabase();
-            var value = await db.StringGetAsync(key);
+            var fullKey = GetPrefixedKey(key);
+            var value = await db.StringGetAsync(fullKey);
 
             if (value.IsNull)
             {
@@ -47,10 +54,12 @@ public class RedisCache(IConnectionMultiplexer redis, string keyPrefix = "users:
         try
         {
             var db = redis.GetDatabase();
+            var fullKey = GetPrefixedKey(key);
             var serializedValue = JsonSerializer.Serialize(value);
             var ttl = expiration ?? TimeSpan.FromMinutes(5);
 
-            await db.StringSetAsync(key, serializedValue, ttl);
+            await db.StringSetAsync(fullKey, serializedValue, ttl);
+            await AddToIndexAsync(fullKey); // Indexamos la clave automáticamente
         }
         catch (Exception ex)
         {
@@ -58,13 +67,17 @@ public class RedisCache(IConnectionMultiplexer redis, string keyPrefix = "users:
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Elimina una clave de la caché y la retira del índice.
+    /// </summary>
     public async Task RemoveAsync(string key)
     {
         try
         {
             var db = redis.GetDatabase();
-            await db.KeyDeleteAsync(key);
+            var fullKey = GetPrefixedKey(key);
+            await db.KeyDeleteAsync(fullKey);
+            await db.SetRemoveAsync(IndexKey, fullKey);
         }
         catch (Exception ex)
         {
@@ -72,38 +85,64 @@ public class RedisCache(IConnectionMultiplexer redis, string keyPrefix = "users:
         }
     }
 
+    /// <inheritdoc />
+    public async Task AddToIndexAsync(string key)
+    {
+        try
+        {
+            var db = redis.GetDatabase();
+            var fullKey = GetPrefixedKey(key);
+            await db.SetAddAsync(IndexKey, fullKey);
+        }
+        catch (Exception ex)
+        {
+            _logger.Warning(ex, "Error indexando la clave en Redis. Clave={Key}", key);
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<string>> GetIndexedKeysAsync()
+    {
+        try
+        {
+            var db = redis.GetDatabase();
+            var members = await db.SetMembersAsync(IndexKey);
+            return members.Select(member => member.ToString()).ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.Warning(ex, "Error leyendo el índice de claves de Redis.");
+            return [];
+        }
+    }
+
     /// <summary>
-    /// Elimina las claves propias de la aplicación.
+    /// Elimina de forma eficiente las claves indexadas de la aplicación sin bloquear Redis.
     /// </summary>
-    /// <remarks>
-    /// No se usa FLUSHDB porque es un comando de tipo admin: exige <c>allowAdmin=true</c>
-    /// en la cadena de conexión y borraría la base de datos entera de Redis, incluidos
-    /// datos ajenos a esta aplicación. Las claves propias se localizan por prefijo con SCAN.
-    /// </remarks>
     public async Task RemoveAllAsync()
     {
         try
         {
             var db = redis.GetDatabase();
+            
+            // 1. Obtenemos las claves registradas en nuestro propio índice
+            var indexedKeys = await GetIndexedKeysAsync();
 
-            foreach (var endpoint in redis.GetEndPoints())
+            if (indexedKeys.Count == 0)
             {
-                var server = redis.GetServer(endpoint);
-                if (server.IsReplica)
-                {
-                    continue;
-                }
-
-                var keys = server.Keys(pattern: $"{keyPrefix}*").ToList();
-                if (keys.Count == 0)
-                {
-                    _logger.Debug("No hay claves propias que limpiar en Redis. Prefijo={Prefijo}", keyPrefix);
-                    continue;
-                }
-
-                await db.KeyDeleteAsync(keys.ToArray());
-                _logger.Debug("Se han limpiado {Cantidad} claves de Redis. Prefijo={Prefijo}", keys.Count, keyPrefix);
+                _logger.Debug("No hay claves propias que limpiar en Redis. Prefijo={Prefijo}", keyPrefix);
+                return;
             }
+
+            // 2. Preparamos las claves a eliminar junto con la propia clave del índice
+            var keysToDelete = indexedKeys
+                .Select(k => (RedisKey)k)
+                .Append((RedisKey)IndexKey)
+                .ToArray();
+
+            // 3. Borramos todas de una sola llamada
+            await db.KeyDeleteAsync(keysToDelete);
+            _logger.Debug("Se han limpiado {Cantidad} claves de Redis. Prefijo={Prefijo}", keysToDelete.Length, keyPrefix);
         }
         catch (Exception ex)
         {

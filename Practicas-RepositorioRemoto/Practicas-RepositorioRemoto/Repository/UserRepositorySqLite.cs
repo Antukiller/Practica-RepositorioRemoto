@@ -47,6 +47,10 @@ public class UserRepositorySqLite(AppDbContext contextSqlite) : IUserRepository 
         if (user == null)
             return Result.Failure<User, DomainError>(
                 new DomainError.NotFound("User not found", id));
+        if(user.IsDeleted) {
+            _log.Debug("Error la entidad ya esta borrada.");
+            return Result.Failure<User, DomainError>(new DomainError.DatabaseError("La entidad ya esta borrada."));
+        }
         try {
             var updatedUser = user with {
                 Name = value.Name,
@@ -75,14 +79,14 @@ public class UserRepositorySqLite(AppDbContext contextSqlite) : IUserRepository 
         var user = await contextSqlite.Users.FindAsync(id);
         if (user == null) return  Result.Failure<User, DomainError>(new DomainError.NotFound("User not found", id));
         try {
-            user = user with {
+            var delUser = user with {
                 IsDeleted = true,
                 DeleteAt = DateTime.UtcNow
             };
-            contextSqlite.Entry(user).CurrentValues.SetValues(user);
+            contextSqlite.Entry(user).CurrentValues.SetValues(delUser);
             await contextSqlite.SaveChangesAsync();
             _log.Information("The user has been deleted successfully");
-            return Result.Success<User, DomainError>(user);
+            return Result.Success<User, DomainError>(delUser);
         } catch (Exception e) {
             _log.Error($"ERROR while deleting the user: {e.Message}");     
             return Result.Failure<User, DomainError>(new DomainError.DatabaseError(e.Message));

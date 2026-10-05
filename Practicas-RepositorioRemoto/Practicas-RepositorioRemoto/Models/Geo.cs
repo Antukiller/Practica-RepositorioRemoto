@@ -7,4 +7,6 @@
 public record Geo(
     string Lat,
     string Lng
-);
+) {
+    public Geo() : this("", "") { }
+}

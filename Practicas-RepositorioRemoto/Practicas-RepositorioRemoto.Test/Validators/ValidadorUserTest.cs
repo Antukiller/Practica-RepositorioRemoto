@@ -6,7 +6,7 @@ using Practicas_RepositorioRemoto.Errors;
 using Practicas_RepositorioRemoto.Models;
 using Practicas_RepositorioRemoto.Validators;
 
-namespace Pactica_RepositorioRemoto.Test.Validator;
+namespace Practicas_RepositorioRemoto.Test.Validators;
 
 // ─── VALIDADORUSER TESTS ───────────────────────────────────────────
 
@@ -152,7 +152,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("identificador"));
         }
 
@@ -169,7 +169,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("nombre es obligatorio"));
         }
 
@@ -186,7 +186,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("alfanuméricos"));
         }
 
@@ -206,7 +206,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("email"));
         }
 
@@ -225,7 +225,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("formato español"));
         }
 
@@ -242,7 +242,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("sitio web"));
         }
 
@@ -257,7 +257,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("La fecha de creación no puede ser futura.");
         }
 
@@ -276,7 +276,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("La fecha de actualización no puede ser anterior a la de creación.");
         }
 
@@ -291,7 +291,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("no debe tener fecha de eliminación"));
         }
 
@@ -306,7 +306,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("El usuario es obligatorio.");
         }
     }
@@ -322,7 +322,7 @@ public class ValidadorUserTest
             mockAddress
                 .Setup(v => v.Validar(It.IsAny<Address>()))
                 .Returns(Result.Failure<Address, DomainError>(
-                    new DomainError.Validation(["Error simulado de dirección"])));
+                    new Validation(["Error simulado de dirección"])));
 
             var validador = new ValidadorUser(mockAddress.Object, new ValidadorCompany());
 
@@ -333,7 +333,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("Error simulado de dirección");
             mockAddress.Verify(v => v.Validar(It.IsAny<Address>()), Times.Once);
         }
@@ -346,7 +346,7 @@ public class ValidadorUserTest
             mockCompany
                 .Setup(v => v.Validar(It.IsAny<Company>()))
                 .Returns(Result.Failure<Company, DomainError>(
-                    new DomainError.Validation(["Error simulado de compañía"])));
+                    new Validation(["Error simulado de compañía"])));
 
             var validador = new ValidadorUser(new ValidadorAddress(), mockCompany.Object);
 
@@ -357,7 +357,7 @@ public class ValidadorUserTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("Error simulado de compañía");
             mockCompany.Verify(v => v.Validar(It.IsAny<Company>()), Times.Once);
         }

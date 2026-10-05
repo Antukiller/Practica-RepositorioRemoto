@@ -30,14 +30,24 @@ public static class ValidadorCompanyExtensions {
 /// <summary>
 ///     Validador de compañías que implementa las reglas de dominio.
 /// </summary>
+/// <remarks>
+///     Acumula todos los errores de una compañía en un único
+///     <see cref="Validation" />.
+/// </remarks>
 public class ValidadorCompany : IValidador<Company> {
     /// <summary>Valida una compañía aplicando todas las reglas de dominio.</summary>
+    /// <param name="compania">Compañía a validar</param>
+    /// <returns>
+    ///     <see cref="Result.Success{T, E}" /> si cumple todas las reglas;
+    ///     <see cref="Result.Failure{T, E}" /> con un <see cref="Validation" />
+    ///     que acumula todos los errores detectados.
+    /// </returns>
     public Result<Company, DomainError> Validar(Company compania) {
-        var errores = new List<string>();
-
         if (compania is null)
             return Result.Failure<Company, DomainError>(
-                new DomainError.ValidationError(nameof(Company), "La compañía es obligatoria."));
+                new Validation(["La compañía es obligatoria."]));
+
+        var errores = new List<string>();
 
         if (!compania.Name.IsValidCompanyName())
             errores.Add("El nombre de la compañía es obligatorio y no puede estar en blanco.");
@@ -48,10 +58,8 @@ public class ValidadorCompany : IValidador<Company> {
         if (!compania.Bs.IsValidBs())
             errores.Add("El lema de negocio es obligatorio y no puede estar en blanco.");
 
-        if (errores.Any())
-            return Result.Failure<Company, DomainError>(
-                new DomainError.ValidationError(nameof(Company), string.Join(" ", errores)));
-
-        return Result.Success<Company, DomainError>(compania);
+        return errores.Any()
+            ? Result.Failure<Company, DomainError>(new Validation(errores))
+            : Result.Success<Company, DomainError>(compania);
     }
 }

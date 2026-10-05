@@ -14,8 +14,8 @@ public interface IValidador<T> {
     /// <param name="elemento">Elemento a validar.</param>
     /// <returns>
     ///     <see cref="Result.Success{T, E}" /> si cumple todas las reglas;
-    ///     <see cref="Result.Failure{T, E}" /> con un <see cref="DomainError.ValidationError" />
-    ///     en caso contrario.
+    ///     <see cref="Result.Failure{T, E}" /> con un <see cref="Validation" />
+    ///     que acumula todos los errores detectados, en caso contrario.
     /// </returns>
     Result<T, DomainError> Validar(T elemento);
 }

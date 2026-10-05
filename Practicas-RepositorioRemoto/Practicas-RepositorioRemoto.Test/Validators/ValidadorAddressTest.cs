@@ -1,13 +1,11 @@
-using CSharpFunctionalExtensions;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using Practicas_RepositorioRemoto.Errors;
 using Practicas_RepositorioRemoto.Models;
 using Practicas_RepositorioRemoto.Validators;
 
 
-namespace Pactica_RepositorioRemoto.Test.Validator;
+namespace Practicas_RepositorioRemoto.Test.Validators;
 
 // ─── VALIDADORADDRESS TESTS ───────────────────────────────────────────
 
@@ -16,13 +14,6 @@ namespace Pactica_RepositorioRemoto.Test.Validator;
 /// </summary>
 [TestFixture]
 public class ValidadorAddressTest {
-    [SetUp]
-    public void SetUp() {
-        _validador = new ValidadorAddress();
-    }
-
-    private ValidadorAddress _validador = null!;
-
     /// <summary>Crea una dirección válida que sirve de base para los casos de prueba.</summary>
     private static Address CrearAddressValida() {
         return new Address(
@@ -103,8 +94,8 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().BeOfType<DomainError.Validation>();
-            var validationError = (DomainError.Validation)result.Error;
+            result.Error.Should().BeOfType<Validation>();
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("La calle es obligatoria y no puede estar en blanco.");
         }
 
@@ -119,7 +110,7 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("El bloque/piso es obligatorio y no puede estar en blanco.");
         }
 
@@ -134,7 +125,7 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("ciudad") && e.Contains("en blanco"));
         }
 
@@ -150,7 +141,7 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("código postal"));
         }
 
@@ -166,7 +157,7 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("geolocalización"));
         }
 
@@ -180,7 +171,7 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("La dirección es obligatoria.");
         }
 
@@ -194,7 +185,7 @@ public class ValidadorAddressTest {
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().HaveCount(5);
         }
     }

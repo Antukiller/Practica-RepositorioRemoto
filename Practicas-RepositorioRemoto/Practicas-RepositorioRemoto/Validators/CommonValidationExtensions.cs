@@ -35,9 +35,19 @@ public static class CommonValidationExtensions {
     private static readonly Regex RegexEmail = new(
         $@"^\s*{Local}@{Dominio}(?:\.{Dominio})*\.[a-z]{{2,}}\s*$", Opciones, Timeout);
 
-    /// <summary>Patrón de teléfono español: prefijo +34 opcional, 9 cifras empezando por 6, 7, 8 o 9.</summary>
+    /// <summary>Patrón de separadores admitidos en un teléfono: espacios, puntos y guiones.</summary>
+    private static readonly Regex RegexSeparadores = new(@"[\s.\-]", Opciones, Timeout);
+
+    /// <summary>
+    ///     Patrón de teléfono español: prefijo +34 opcional, separados por espacios, guiones o puntos.
+    /// </summary>
+    /// <remarks>
+    ///     Este patrón solo controla la FORMA del texto; el número de cifras y el dígito inicial
+    ///     los verifica <see cref="IsValidSpanishPhone" />, porque una expresión regular no puede
+    ///     contar dígitos ignorando los separadores intercalados.
+    /// </remarks>
     private static readonly Regex RegexTelefono = new(
-        @"^\s*(\+34[\s.\-]?)?[6-9]\d{2}[\s.\-]?\d{2}[\s.\-]?\d{3}\s*$", Opciones, Timeout);
+        @"^\s*(\+34)?[\s.\-]?\d[\d\s.\-]{6,15}\s*$", Opciones, Timeout);
 
     /// <summary>Patrón de URL http/https, con esquema opcional (JSONPlaceholder no lo devuelve).</summary>
     private static readonly Regex RegexUrl = new(
@@ -77,16 +87,26 @@ public static class CommonValidationExtensions {
     }
 
     /// <summary>
-    ///     Valida un teléfono con formato español: prefijo +34 opcional, 9 dígitos que empiezan por 6, 7, 8 o 9,
-    ///     separados por espacios, guiones o puntos de forma opcional.
+    ///     Valida un teléfono con formato español: prefijo +34 opcional y 9 cifras que empiezan
+    ///     por 6, 7, 8 o 9, separadas por espacios, guiones o puntos de forma opcional.
     /// </summary>
     /// <remarks>
+    ///     Se eliminan los separadores antes de contar las cifras, de modo que se aceptan tanto
+    ///     "600123456" como "600 12 34 56" o "600-12-34-56", y se rechazan los que no suman 9
+    ///     cifras (por ejemplo "60012345").
     ///     Ejemplos válidos: "600123456", "+34 600 12 34 56", "600-12-34-56".
     /// </remarks>
     public static bool IsValidSpanishPhone(this string telefono) {
         if (telefono.IsNotBlank() is false) return false;
+        if (RegexTelefono.IsMatch(telefono) is false) return false;
 
-        return RegexTelefono.IsMatch(telefono);
+        var valor = telefono.Trim();
+
+        if (valor.StartsWith("+34", StringComparison.Ordinal)) valor = valor[3..];
+
+        var digitos = RegexSeparadores.Replace(valor, string.Empty);
+
+        return digitos.Length == 9 && digitos[0] is >= '6' and <= '9';
     }
 
     /// <summary>

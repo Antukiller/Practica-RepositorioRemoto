@@ -2,7 +2,7 @@ using Practicas_RepositorioRemoto.Errors;
 using Practicas_RepositorioRemoto.Models;
 using Practicas_RepositorioRemoto.Validators;
 
-namespace Pactica_RepositorioRemoto.Test.Validator;
+namespace Practicas_RepositorioRemoto.Test.Validators;
 
 // ─── VALIDADORCOMPANY TESTS ───────────────────────────────────────────
 
@@ -80,8 +80,8 @@ public class ValidadorCompanyTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().BeOfType<DomainError.Validation>();
-            var validationError = (DomainError.Validation)result.Error;
+            result.Error.Should().BeOfType<Validation>();
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("nombre de la compañía"));
         }
 
@@ -97,7 +97,7 @@ public class ValidadorCompanyTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("eslogan"));
         }
 
@@ -113,7 +113,7 @@ public class ValidadorCompanyTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain(e => e.Contains("lema de negocio"));
         }
 
@@ -128,7 +128,7 @@ public class ValidadorCompanyTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().Contain("La compañía es obligatoria.");
         }
 
@@ -143,7 +143,7 @@ public class ValidadorCompanyTest
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            var validationError = (DomainError.Validation)result.Error;
+            var validationError = (Validation)result.Error;
             validationError.Errors.Should().HaveCount(3);
         }
     }

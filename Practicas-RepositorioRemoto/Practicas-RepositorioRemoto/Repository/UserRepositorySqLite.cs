@@ -11,9 +11,9 @@ namespace Practicas_RepositorioRemoto.Repository;
 /// <summary>
 /// 
 /// </summary>
-public class UserRepository(AppDbContext contextSqlite) : IUserRepository {
+public class UserRepositorySqLite(AppDbContext contextSqlite) : IUserRepository {
 
-    private readonly ILogger _log = Log.ForContext<UserRepository>();
+    private readonly ILogger _log = Log.ForContext<UserRepositorySqLite>();
 
     public async Task<IEnumerable<User>> GetAllAsync() {
         _log.Information("Getting all the users");

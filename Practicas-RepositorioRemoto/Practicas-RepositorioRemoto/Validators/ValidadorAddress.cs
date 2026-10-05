@@ -37,14 +37,24 @@ public static class ValidadorAddressExtensions {
 /// <summary>
 ///     Validador de direcciones que implementa las reglas de dominio.
 /// </summary>
+/// <remarks>
+///     Acumula todos los errores de una dirección en un único
+///     <see cref="Validation" />.
+/// </remarks>
 public class ValidadorAddress : IValidador<Address> {
     /// <summary>Valida una dirección aplicando todas las reglas de dominio.</summary>
+    /// <param name="direccion">Dirección a validar</param>
+    /// <returns>
+    ///     <see cref="Result.Success{T, E}" /> si cumple todas las reglas;
+    ///     <see cref="Result.Failure{T, E}" /> con un <see cref="Validation" />
+    ///     que acumula todos los errores detectados.
+    /// </returns>
     public Result<Address, DomainError> Validar(Address direccion) {
-        var errores = new List<string>();
-
         if (direccion is null)
             return Result.Failure<Address, DomainError>(
-                new DomainError.ValidationError(nameof(Address), "La dirección es obligatoria."));
+                new Validation(["La dirección es obligatoria."]));
+
+        var errores = new List<string>();
 
         if (!direccion.Street.IsValidStreet())
             errores.Add("La calle es obligatoria y no puede estar en blanco.");
@@ -61,10 +71,8 @@ public class ValidadorAddress : IValidador<Address> {
         if (!direccion.Geo.IsValidGeo())
             errores.Add("La geolocalización es obligatoria y sus coordenadas deben tener formato numérico válido.");
 
-        if (errores.Any())
-            return Result.Failure<Address, DomainError>(
-                new DomainError.ValidationError(nameof(Address), string.Join(" ", errores)));
-
-        return Result.Success<Address, DomainError>(direccion);
+        return errores.Any()
+            ? Result.Failure<Address, DomainError>(new Validation(errores))
+            : Result.Success<Address, DomainError>(direccion);
     }
 }

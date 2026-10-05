@@ -199,12 +199,16 @@ public class UserRepositoryPostgreTests
     [Test]
     public async Task Update_UsuarioYaEliminado_DeberiaRetornarNotFound()
     {
-        var creado = await _repository.CreateAsync(
-            CrearUsuarioValido() with { IsDeleted = true, DeleteAt = DateTime.UtcNow });
+        // 1. Creamos un usuario activo
+        var creado = await _repository.CreateAsync(CrearUsuarioValido());
 
+        // 2. Lo eliminamos lógicamente a través del repositorio
+        await _repository.DeleteAsync(creado.Value.Id);
+
+        // 3. Intentamos actualizar el usuario borrado
         var resultado = await _repository.UpdateAsync(creado.Value.Id, creado.Value);
 
-        // Al estar borrado lógicamente, el repositorio lo trata como no existente para actualización
+        // Assert: Debe fallar con NotFound porque está IsDeleted = true
         resultado.IsFailure.Should().BeTrue();
         resultado.Error.Should().BeOfType<DomainError.NotFound>();
     }

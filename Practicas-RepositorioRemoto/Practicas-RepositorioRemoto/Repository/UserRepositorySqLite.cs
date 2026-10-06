@@ -92,4 +92,25 @@ public class UserRepositorySqLite(AppDbContext contextSqlite) : IUserRepository 
             return Result.Failure<User, DomainError>(new DomainError.DatabaseError(e.Message));
         }
     }
+
+    /// <summary>
+    /// Elimina físicamente todos los usuarios de la tabla.
+    /// </summary>
+    /// <remarks>
+    /// El borrado lógico de <see cref="DeleteAsync(int)"/> no sirve para la sincronización:
+    /// dejaría registros con IsDeleted = true cuya clave primaria impediría reinsertarlos.
+    /// ExecuteDeleteAsync borra las filas sin pasar por el change tracker.
+    /// </remarks>
+    /// <returns>El número de registros eliminados.</returns>
+    public async Task<Result<int, DomainError>> DeleteAllAsync() {
+        _log.Information("Deleting all the users");
+        try {
+            var eliminados = await contextSqlite.Users.ExecuteDeleteAsync();
+            _log.Information($"All users have been deleted successfully. Rows removed: {eliminados}");
+            return Result.Success<int, DomainError>(eliminados);
+        } catch (Exception e) {
+            _log.Error($"ERROR while deleting all users: {e.Message}");
+            return Result.Failure<int, DomainError>(new DomainError.DatabaseError(e.Message));
+        }
+    }
 }

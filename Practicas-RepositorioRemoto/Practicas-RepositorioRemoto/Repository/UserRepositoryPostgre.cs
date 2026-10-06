@@ -10,13 +10,12 @@ namespace Practicas_RepositorioRemoto.Repository;
 
 public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRepository, IScopedService {
     private readonly ILogger _logger = Log.ForContext<UserRepositoryPostgre>();
-    private readonly AppDbContextPostgre _contextPostgre = contextPostgre;
 
     /// <summary>
     /// Obtiene todos los usuarios activos (no eliminados).
     /// </summary>
     public async Task<IEnumerable<User>> GetAllAsync() {
-        return await _contextPostgre.Users
+        return await contextPostgre.Users
             .Where(e => !e.IsDeleted) // Filtramos los borrados lógicamente
             .OrderBy(e => e.Id)
             .AsNoTracking() // AsNoTracking para optimizar lecturas
@@ -27,7 +26,7 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
     /// Obtiene un usuario activo por su ID.
     /// </summary>
     public async Task<Result<User, DomainError>> GetByIdAsync(int id) {
-        var model = await _contextPostgre.Users.FindAsync(id);
+        var model = await contextPostgre.Users.FindAsync(id);
 
         if (model is null || model.IsDeleted) {
             _logger.Debug("Error al intentar encontrar la entidad activa con el id: {Id}.", id);
@@ -48,8 +47,8 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
                 IsDeleted = false
             };
 
-            _contextPostgre.Users.Add(newUser);
-            await _contextPostgre.SaveChangesAsync();
+            contextPostgre.Users.Add(newUser);
+            await contextPostgre.SaveChangesAsync();
 
             _logger.Debug("Se ha registrado correctamente la nueva entidad con ID: {Id}.", newUser.Id);
             return Result.Success<User, DomainError>(newUser);
@@ -64,7 +63,7 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
     /// Actualiza un usuario existente refrescando su fecha de modificación.
     /// </summary>
     public async Task<Result<User, DomainError>> UpdateAsync(int id, User entity) {
-        var user = await _contextPostgre.Users.FindAsync(id);
+        var user = await contextPostgre.Users.FindAsync(id);
 
         if (user is null || user.IsDeleted) {
             _logger.Debug("Error al intentar encontrar la entidad activa con el id: {Id}.", id);
@@ -85,10 +84,10 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
             };
 
             // 2. Desenganchamos la entidad antigua y marcamos la nueva como modificada
-            _contextPostgre.Entry(user).State = EntityState.Detached;
-            _contextPostgre.Users.Update(updatedUser);
+            contextPostgre.Entry(user).State = EntityState.Detached;
+            contextPostgre.Users.Update(updatedUser);
 
-            await _contextPostgre.SaveChangesAsync();
+            await contextPostgre.SaveChangesAsync();
 
             _logger.Debug("Se ha actualizado con éxito la entidad con el id: {Id}.", id);
             return Result.Success<User, DomainError>(updatedUser);
@@ -103,7 +102,7 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
     /// Realiza un borrado lógico (Soft Delete) marcando la entidad como eliminada.
     /// </summary>
     public async Task<Result<User, DomainError>> DeleteAsync(int id) {
-        var user = await _contextPostgre.Users.FindAsync(id);
+        var user = await contextPostgre.Users.FindAsync(id);
 
         if (user is null || user.IsDeleted) {
             _logger.Debug("Error al intentar eliminar: la entidad no existe o ya está borrada. ID: {Id}.", id);
@@ -116,10 +115,10 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
                 DeleteAt = DateTime.UtcNow
             };
 
-            _contextPostgre.Entry(user).State = EntityState.Detached;
-            _contextPostgre.Users.Update(deletedUser);
+            contextPostgre.Entry(user).State = EntityState.Detached;
+            contextPostgre.Users.Update(deletedUser);
 
-            await _contextPostgre.SaveChangesAsync();
+            await contextPostgre.SaveChangesAsync();
 
             _logger.Debug("Se ha eliminado lógicamente con éxito la entidad con el id: {Id}.", id);
             return Result.Success<User, DomainError>(deletedUser); // Devuelve deletedUser
@@ -127,6 +126,28 @@ public class UserRepositoryPostgre(AppDbContextPostgre contextPostgre) : IUserRe
         catch (Exception e) {
             _logger.Error(e, "Error al intentar eliminar la entidad con id: {Id}.", id);
             return Result.Failure<User, DomainError>(new DomainError.DatabaseError(e.Message));
+        }
+    }
+
+    /// <summary>
+    /// Elimina físicamente todos los usuarios de la tabla.
+    /// </summary>
+    /// <remarks>
+    /// El borrado lógico de <see cref="DeleteAsync"/> no sirve para la sincronización: dejaría
+    /// registros con <c>IsDeleted = true</c> cuya clave primaria impediría reinsertarlos.
+    /// Por eso se usa <c>ExecuteDeleteAsync</c>, que borra las filas sin pasar por el change tracker.
+    /// </remarks>
+    /// <returns>El número de registros eliminados.</returns>
+    public async Task<Result<int, DomainError>> DeleteAllAsync() {
+        try {
+            var eliminados = await contextPostgre.Users.ExecuteDeleteAsync();
+
+            _logger.Debug("Tabla de usuarios vaciada. Registros eliminados: {Total}", eliminados);
+            return Result.Success<int, DomainError>(eliminados);
+        }
+        catch (Exception e) {
+            _logger.Error(e, "Error al eliminar todos los usuarios.");
+            return Result.Failure<int, DomainError>(new DomainError.DatabaseError(e.Message));
         }
     }
 }

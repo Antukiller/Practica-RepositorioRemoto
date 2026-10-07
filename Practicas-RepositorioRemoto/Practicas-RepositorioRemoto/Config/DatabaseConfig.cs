@@ -1,8 +1,80 @@
-﻿namespace Practicas_RepositorioRemoto.Config;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Configuration;
 
-public class DatabaseConfig {
+namespace Practicas_RepositorioRemoto.Config;
+/// <summary>
+/// Clase que lee los archivos appdettings.json
+/// </summary>
+public static class DatabaseConfig {
+
+    public static IConfiguration Config { get; private set; } = null!;
+
+    public static void Init(string[] args) {
+        var entorno = args.Length > 0 ? args[0] : "Development";
+
+        Config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile(
+                $"appsettings.{entorno.ToLowerInvariant()}.json",
+                false,
+                true
+            )
+            .Build();
+    }
+
+    /// <summary>
+    /// Obtiene el nombre de la api
+    /// </summary>
+    public static string ApiName => Config.GetValue<string>("ApiSettings:Name") ?? "DefaultApp";
     
-    public string Provider { get; set; } = "Sqlite";
-    public string SqliteConnectionString { get; set; } = "Data Source=app.db";
-    public string BaseUrl { get; set; } = "https://jsonplaceholder.typicode.com";
+    /// <summary>
+    /// Obtiene el link de la api rest
+    /// </summary>
+    public static string BaseUrl =>
+        Config.GetValue<string>("ApiSettings:BaseUrl")
+        ?? "https://jsonplaceholder.typicode.com"; 
+    
+    /// <summary>
+    /// Obtiene el nombre del tipo de repositorio que se configurara
+    /// </summary>
+    public static string RepositoryName => Config.GetValue<string>("Repository:Name") ?? "SQLite";
+    
+    /// <summary>
+    /// Obtiene la cadena de conexion
+    /// </summary>
+    public static string DbConnection => 
+        Config.GetValue<string>("Repository:ConnectionString") ?? 
+        throw new InvalidOperationException("Falta Repository:ConnectionString en la configuración.");
+    
+    /// <summary>
+    /// Obtiene el tipo de cachee
+    /// </summary>
+    public static string CacheName => Config.GetValue<string>("Cache:Name") ?? "Memory";
+   
+    /// <summary>
+    /// Obtiene el tiempo de vida de los items de la cache
+    /// </summary>
+    public static int CacheTtl => Config.GetValue("Cache:TTL", 30);
+   
+    /// <summary>
+    /// Obtiene la sincronizacion
+    /// </summary>
+    public static int CacheSincronizacion => Config.GetValue("Cache:Sincronización", 60);
+    
+    /// <summary>
+    /// Obtiene la ruta de la carpeta data
+    /// </summary>
+    public static string DataFolder => Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory,
+        "data"
+    );
+
+    /// <summary>
+    /// Obtiene la ruta del archivo JSON
+    /// </summary>
+    public static string UsersJsonPath => Path.Combine(
+        DataFolder,
+        "users.json"
+    );
+
 }

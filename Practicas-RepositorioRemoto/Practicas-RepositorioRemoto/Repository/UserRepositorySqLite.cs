@@ -17,12 +17,17 @@ public class UserRepositorySqLite(AppDbContext contextSqlite) : IUserRepository 
 
     public async Task<IEnumerable<User>> GetAllAsync() {
         _log.Information("Getting all the users");
-        return await contextSqlite.Users.OrderBy(p => p.Id).ToListAsync();
+        return await contextSqlite.Users
+            .Where(u => !u.IsDeleted)
+            .OrderBy(p => p.Id)
+            .ToListAsync();
     }
 
     public async Task<Result<User, DomainError>> GetByIdAsync(int id) {
         _log.Information($"Getting the user by id: {id}");
-        return await contextSqlite.Users.FindAsync(id) is { } user
+        var user = await contextSqlite.Users
+            .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
+        return user is not null
             ? Result.Success<User, DomainError>(user)
             : Result.Failure<User, DomainError>(new DomainError.NotFound("User not found", id));
     }
@@ -77,7 +82,8 @@ public class UserRepositorySqLite(AppDbContext contextSqlite) : IUserRepository 
     public async Task<Result<User, DomainError>> DeleteAsync(int id) {
         _log.Information($"Deleting the user with id: {id}");
         var user = await contextSqlite.Users.FindAsync(id);
-        if (user == null) return  Result.Failure<User, DomainError>(new DomainError.NotFound("User not found", id));
+        if (user == null || user.IsDeleted) 
+            return Result.Failure<User, DomainError>(new DomainError.NotFound("User not found", id));
         try {
             var delUser = user with {
                 IsDeleted = true,

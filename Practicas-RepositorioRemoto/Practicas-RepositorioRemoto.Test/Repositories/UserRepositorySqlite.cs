@@ -139,10 +139,9 @@ public class UserRepositorySqlite {
             resultado.Value.IsDeleted.Should().BeTrue();
             resultado.Value.DeleteAt.Should().NotBe(default);
 
-            // El borrado es lógico: la fila permanece en la tabla.
-            var releido = await _repository.GetByIdAsync(creado.Value.Id);
-            releido.IsSuccess.Should().BeTrue();
-            releido.Value.IsDeleted.Should().BeTrue();
+            var enDb = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == creado.Value.Id);
+            enDb.Should().NotBeNull();
+            enDb!.IsDeleted.Should().BeTrue();
         }
 
         [TestFixture]

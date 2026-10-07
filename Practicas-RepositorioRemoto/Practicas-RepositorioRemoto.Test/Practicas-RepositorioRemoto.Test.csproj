@@ -41,4 +41,8 @@
         <ProjectReference Include="..\Practicas-RepositorioRemoto\Practicas-RepositorioRemoto.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
+
 </Project>

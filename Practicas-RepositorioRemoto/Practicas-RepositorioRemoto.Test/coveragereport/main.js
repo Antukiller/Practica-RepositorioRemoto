@@ -290,32 +290,43 @@ var assemblies = [
   {
     "name": "Practicas-RepositorioRemoto",
     "classes": [
-      { "name": "Practicas_RepositorioRemoto.Cache.RedisCache", "rp": "Practicas_RepositorioRemoto_RedisCache.html", "cl": 58, "ucl": 29, "cal": 87, "tl": 160, "cb": 9, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Config.DatabaseConfig", "rp": "Practicas_RepositorioRemoto_DatabaseConfig.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Dto.CreateUserRequest", "rp": "Practicas_RepositorioRemoto_CreateUserRequest.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.AddressDto", "rp": "Practicas_RepositorioRemoto_AddressDto.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.CompanyDto", "rp": "Practicas_RepositorioRemoto_CompanyDto.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.GeoDto", "rp": "Practicas_RepositorioRemoto_GeoDto.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Cache.MemCache", "rp": "Practicas_RepositorioRemoto_MemCache.html", "cl": 48, "ucl": 13, "cal": 61, "tl": 105, "cb": 9, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Cache.RedisCache", "rp": "Practicas_RepositorioRemoto_RedisCache.html", "cl": 115, "ucl": 19, "cal": 134, "tl": 156, "cb": 24, "tb": 30, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Config.DatabaseConfig", "rp": "Practicas_RepositorioRemoto_DatabaseConfig.html", "cl": 8, "ucl": 24, "cal": 32, "tl": 79, "cb": 0, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Dto.CreateUserRequest", "rp": "Practicas_RepositorioRemoto_CreateUserRequest.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.AddressDto", "rp": "Practicas_RepositorioRemoto_AddressDto.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.CompanyDto", "rp": "Practicas_RepositorioRemoto_CompanyDto.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.GeoDto", "rp": "Practicas_RepositorioRemoto_GeoDto.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Practicas_RepositorioRemoto.Dto.ModelDto.UserDto", "rp": "Practicas_RepositorioRemoto_UserDto.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Dto.UpdateUserRepuest", "rp": "Practicas_RepositorioRemoto_UpdateUserRepuest.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Entity.AppDbContext", "rp": "Practicas_RepositorioRemoto_AppDbContext.html", "cl": 0, "ucl": 42, "cal": 42, "tl": 50, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Dto.UpdateUserRepuest", "rp": "Practicas_RepositorioRemoto_UpdateUserRepuest.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Dto.UpdateUserRequest", "rp": "Practicas_RepositorioRemoto_UpdateUserRequest.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Entity.AppDbContext", "rp": "Practicas_RepositorioRemoto_AppDbContext.html", "cl": 42, "ucl": 0, "cal": 42, "tl": 50, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Practicas_RepositorioRemoto.Entity.AppDbContextPostgre", "rp": "Practicas_RepositorioRemoto_AppDbContextPostgre.html", "cl": 57, "ucl": 0, "cal": 57, "tl": 108, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Errors.DomainError", "rp": "Practicas_RepositorioRemoto_DomainError.html", "cl": 2, "ucl": 2, "cal": 4, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Errors.DomainError", "rp": "Practicas_RepositorioRemoto_DomainError.html", "cl": 3, "ucl": 1, "cal": 4, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Practicas_RepositorioRemoto.Errors.Validation", "rp": "Practicas_RepositorioRemoto_Validation.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Infrastructure.DependenciesProviderScrutor", "rp": "Practicas_RepositorioRemoto_DependenciesProviderScrutor.html", "cl": 0, "ucl": 16, "cal": 16, "tl": 55, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Models.Address", "rp": "Practicas_RepositorioRemoto_Address.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Models.Company", "rp": "Practicas_RepositorioRemoto_Company.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Models.Geo", "rp": "Practicas_RepositorioRemoto_Geo.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Models.User", "rp": "Practicas_RepositorioRemoto_User.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Repository.UserRepositoryPostgre", "rp": "Practicas_RepositorioRemoto_UserRepositoryPostgre.html", "cl": 70, "ucl": 6, "cal": 76, "tl": 111, "cb": 8, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Repository.UserRepositorySqLite", "rp": "Practicas_RepositorioRemoto_UserRepositorySqLite.html", "cl": 0, "ucl": 67, "cal": 67, "tl": 91, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Infrastructure.DependenciesProvider", "rp": "Practicas_RepositorioRemoto_DependenciesProvider.html", "cl": 0, "ucl": 78, "cal": 78, "tl": 135, "cb": 0, "tb": 24, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Infrastructure.DependenciesProviderScrutor", "rp": "Practicas_RepositorioRemoto_DependenciesProviderScrutor.html", "cl": 0, "ucl": 16, "cal": 16, "tl": 135, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Mapper.AddressMapper", "rp": "Practicas_RepositorioRemoto_AddressMapper.html", "cl": 36, "ucl": 0, "cal": 36, "tl": 48, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Mapper.CompanyMapper", "rp": "Practicas_RepositorioRemoto_CompanyMapper.html", "cl": 29, "ucl": 0, "cal": 29, "tl": 42, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Mapper.UsersMapper", "rp": "Practicas_RepositorioRemoto_UsersMapper.html", "cl": 32, "ucl": 0, "cal": 32, "tl": 40, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Models.Address", "rp": "Practicas_RepositorioRemoto_Address.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Models.Company", "rp": "Practicas_RepositorioRemoto_Company.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Models.Geo", "rp": "Practicas_RepositorioRemoto_Geo.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Models.User", "rp": "Practicas_RepositorioRemoto_User.html", "cl": 15, "ucl": 0, "cal": 15, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Notifications.ConsoleNotificationService", "rp": "Practicas_RepositorioRemoto_ConsoleNotificationService.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 55, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Notifications.Notification", "rp": "Practicas_RepositorioRemoto_Notification.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Program", "rp": "Practicas_RepositorioRemoto_Program.html", "cl": 0, "ucl": 441, "cal": 441, "tl": 660, "cb": 0, "tb": 44, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Repository.UserRepositoryPostgre", "rp": "Practicas_RepositorioRemoto_UserRepositoryPostgre.html", "cl": 112, "ucl": 14, "cal": 126, "tl": 153, "cb": 32, "tb": 32, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Repository.UserRepositorySqLite", "rp": "Practicas_RepositorioRemoto_UserRepositorySqLite.html", "cl": 83, "ucl": 14, "cal": 97, "tl": 123, "cb": 15, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Services.Background.BackgroundService", "rp": "Practicas_RepositorioRemoto_BackgroundService.html", "cl": 0, "ucl": 63, "cal": 63, "tl": 111, "cb": 0, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Services.UsersService", "rp": "Practicas_RepositorioRemoto_UsersService.html", "cl": 122, "ucl": 29, "cal": 151, "tl": 297, "cb": 38, "tb": 42, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Practicas_RepositorioRemoto.Validators.CommonValidationExtensions", "rp": "Practicas_RepositorioRemoto_CommonValidationExtensions.html", "cl": 47, "ucl": 0, "cal": 47, "tl": 149, "cb": 17, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorAddress", "rp": "Practicas_RepositorioRemoto_ValidadorAddress.html", "cl": 19, "ucl": 0, "cal": 19, "tl": 78, "cb": 14, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorAddressExtensions", "rp": "Practicas_RepositorioRemoto_ValidadorAddressExtensions.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 78, "cb": 3, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorCompany", "rp": "Practicas_RepositorioRemoto_ValidadorCompany.html", "cl": 15, "ucl": 0, "cal": 15, "tl": 65, "cb": 10, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorCompanyExtensions", "rp": "Practicas_RepositorioRemoto_ValidadorCompanyExtensions.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 65, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorUser", "rp": "Practicas_RepositorioRemoto_ValidadorUser.html", "cl": 44, "ucl": 5, "cal": 49, "tl": 107, "cb": 32, "tb": 36, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Program", "rp": "Practicas_RepositorioRemoto_Program.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 3, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorAddress", "rp": "Practicas_RepositorioRemoto_ValidadorAddress.html", "cl": 27, "ucl": 0, "cal": 27, "tl": 79, "cb": 28, "tb": 28, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorAddressExtensions", "rp": "Practicas_RepositorioRemoto_ValidadorAddressExtensions.html", "cl": 18, "ucl": 0, "cal": 18, "tl": 79, "cb": 6, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorCompany", "rp": "Practicas_RepositorioRemoto_ValidadorCompany.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 66, "cb": 20, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorCompanyExtensions", "rp": "Practicas_RepositorioRemoto_ValidadorCompanyExtensions.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 66, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Practicas_RepositorioRemoto.Validators.ValidadorUser", "rp": "Practicas_RepositorioRemoto_ValidadorUser.html", "cl": 64, "ucl": 7, "cal": 71, "tl": 108, "cb": 64, "tb": 72, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "Practicas_RepositorioRemoto_Program.2.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 660, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -330,7 +341,37 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
+    "assembly": "Practicas-RepositorioRemoto", "class": "Practicas_RepositorioRemoto.Infrastructure.DependenciesProvider", "reportPath": "Practicas_RepositorioRemoto_DependenciesProvider.html", "methodName": "ConfigureRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)", "methodShortName": "ConfigureRepository(...)", "fileIndex": 0, "line": 58,
+    "metrics": [
+      { "value": 210, "exceeded": true },
+      { "value": 14, "exceeded": false },
+    ]},
+  {
+    "assembly": "Practicas-RepositorioRemoto", "class": "Practicas_RepositorioRemoto.Program", "reportPath": "Practicas_RepositorioRemoto_Program.html", "methodName": "Mensaje(Practicas_RepositorioRemoto.Errors.DomainError)", "methodShortName": "Mensaje(...)", "fileIndex": 0, "line": 575,
+    "metrics": [
+      { "value": 156, "exceeded": true },
+      { "value": 12, "exceeded": false },
+    ]},
+  {
+    "assembly": "Practicas-RepositorioRemoto", "class": "Practicas_RepositorioRemoto.Infrastructure.DependenciesProvider", "reportPath": "Practicas_RepositorioRemoto_DependenciesProvider.html", "methodName": "ConfigureCache(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)", "methodShortName": "ConfigureCache(...)", "fileIndex": 0, "line": 99,
+    "metrics": [
+      { "value": 72, "exceeded": true },
+      { "value": 8, "exceeded": false },
+    ]},
+  {
+    "assembly": "Practicas-RepositorioRemoto", "class": "Practicas_RepositorioRemoto.Services.Background.BackgroundService", "reportPath": "Practicas_RepositorioRemoto_BackgroundService.html", "methodName": "Synchronize()", "methodShortName": "Synchronize()", "fileIndex": 0, "line": 48,
+    "metrics": [
+      { "value": 42, "exceeded": true },
+      { "value": 6, "exceeded": false },
+    ]},
+  {
     "assembly": "Practicas-RepositorioRemoto", "class": "Practicas_RepositorioRemoto.Validators.ValidadorUser", "reportPath": "Practicas_RepositorioRemoto_ValidadorUser.html", "methodName": "Validar(Practicas_RepositorioRemoto.Models.User)", "methodShortName": "Validar(...)", "fileIndex": 0, "line": 29,
+    "metrics": [
+      { "value": 32, "exceeded": true },
+      { "value": 32, "exceeded": true },
+    ]},
+  {
+    "assembly": "Practicas-RepositorioRemoto", "class": "Practicas_RepositorioRemoto.Validators.ValidadorUser", "reportPath": "Practicas_RepositorioRemoto_ValidadorUser.html", "methodName": "Validar(Practicas_RepositorioRemoto.Models.User)", "methodShortName": "Validar(...)", "fileIndex": 0, "line": 30,
     "metrics": [
       { "value": 32, "exceeded": true },
       { "value": 32, "exceeded": true },

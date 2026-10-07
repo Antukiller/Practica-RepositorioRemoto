@@ -18,7 +18,7 @@ public static class UsersMapper {
 
         };
     }
-    public static User ToModel(this UpdateUserRepuest dto) {
+    public static User ToModel(this UpdateUserRequest dto) {
         return new User {
             Id = 0,
             Name = dto.Name,

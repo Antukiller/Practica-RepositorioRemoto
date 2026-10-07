@@ -1,7 +1,5 @@
-using CSharpFunctionalExtensions; 
-using FluentAssertions;
+using CSharpFunctionalExtensions;
 using Moq;
-using NUnit.Framework;
 using Practicas_RepositorioRemoto.Errors;
 using Practicas_RepositorioRemoto.Models;
 using Practicas_RepositorioRemoto.Validators;
@@ -11,43 +9,47 @@ namespace Practicas_RepositorioRemoto.Test.Validators;
 // ─── VALIDADORUSER TESTS ───────────────────────────────────────────
 
 /// <summary>
-/// Tests for ValidadorUser covering id, name, user name, email, phone, website,
-/// audit dates and the delegation to the nested Address and Company validators.
+///     Tests for ValidadorUser covering id, name, user name, email, phone, website,
+///     audit dates and the delegation to the nested Address and Company validators.
 /// </summary>
 [TestFixture]
-public class ValidadorUserTest
-{
+public class ValidadorUserTest {
     /// <summary>Crea un usuario válido que sirve de base para los casos de prueba.</summary>
-    private static User CrearUserValido() => new(
-        Id: 1,
-        Name: "Leanne Graham",
-        UserName: "Bret",
-        Email: "bret@srav.com",
-        Address: new Address("Calle Mayor", "Apt. 123", "Madrid", "28001", new Geo("40.4168", "-3.7038")),
-        Phone: "600 12 34 56",
-        Website: "https://hildegard.org",
-        Company: new Company("Acme Corp", "Slogan", "negocios hodie"),
-        CreateAt: DateTime.Today.AddDays(-1),
-        UpdateAt: DateTime.Today,
-        DeleteAt: default,
-        IsDeleted: false);
+    private static User CrearUserValido() {
+        return new User(
+            1,
+            "Leanne Graham",
+            "Bret",
+            "bret@srav.com",
+            new Address("Calle Mayor", "Apt. 123", "Madrid", "28001", new Geo("40.4168", "-3.7038")),
+            "600 12 34 56",
+            "https://hildegard.org",
+            new Company("Acme Corp", "Slogan", "negocios hodie"),
+            DateTime.Today.AddDays(-1),
+            DateTime.Today,
+            default,
+            false);
+    }
 
-    private static Address AddressValida() =>
-        new("Calle Mayor", "Apt. 123", "Madrid", "28001", new Geo("40.4168", "-3.7038"));
+    private static Address AddressValida() {
+        return new Address("Calle Mayor", "Apt. 123", "Madrid", "28001", new Geo("40.4168", "-3.7038"));
+    }
 
-    private static Company CompanyValida() => new("Acme Corp", "Slogan", "negocios hodie");
+    private static Company CompanyValida() {
+        return new Company("Acme Corp", "Slogan", "negocios hodie");
+    }
 
     [TestFixture]
-    public class CasosPositivos
-    {
+    public class CasosPositivos {
+        [SetUp]
+        public void SetUp() {
+            _validador = new ValidadorUser(new ValidadorAddress(), new ValidadorCompany());
+        }
+
         private ValidadorUser _validador = null!;
 
-        [SetUp]
-        public void SetUp() => _validador = new ValidadorUser(new ValidadorAddress(), new ValidadorCompany());
-
         [Test]
-        public void Validar_UserValido_DeberiaRetornarSuccess()
-        {
+        public void Validar_UserValido_DeberiaRetornarSuccess() {
             // Arrange
             var user = CrearUserValido();
 
@@ -62,8 +64,7 @@ public class ValidadorUserTest
         [TestCase("+34 600 12 34 56")]
         [TestCase("600-12-34-56")]
         [TestCase("912 34 56 78")]
-        public void Validar_TelefonoEspanol_DeberiaRetornarSuccess(string telefono)
-        {
+        public void Validar_TelefonoEspanol_DeberiaRetornarSuccess(string telefono) {
             // Arrange
             var user = CrearUserValido() with { Phone = telefono };
 
@@ -77,8 +78,7 @@ public class ValidadorUserTest
         [TestCase("bret@srav.com")]
         [TestCase("jorge.o.smith@correo.es")]
         [TestCase("user+tag@sub.dominio.com")]
-        public void Validar_EmailValido_DeberiaRetornarSuccess(string email)
-        {
+        public void Validar_EmailValido_DeberiaRetornarSuccess(string email) {
             // Arrange
             var user = CrearUserValido() with { Email = email };
 
@@ -92,8 +92,7 @@ public class ValidadorUserTest
         [TestCase("hildegard.org")] // Sin esquema, como lo devuelve JSONPlaceholder
         [TestCase("https://hildegard.org")]
         [TestCase("http://www.ejemplo.com/pagina")]
-        public void Validar_WebsiteValido_DeberiaRetornarSuccess(string website)
-        {
+        public void Validar_WebsiteValido_DeberiaRetornarSuccess(string website) {
             // Arrange
             var user = CrearUserValido() with { Website = website };
 
@@ -107,8 +106,7 @@ public class ValidadorUserTest
         [TestCase("Bret")]
         [TestCase("jorge.o")]
         [TestCase("user_1")]
-        public void Validar_UserNameValido_DeberiaRetornarSuccess(string userName)
-        {
+        public void Validar_UserNameValido_DeberiaRetornarSuccess(string userName) {
             // Arrange
             var user = CrearUserValido() with { UserName = userName };
 
@@ -120,8 +118,7 @@ public class ValidadorUserTest
         }
 
         [Test]
-        public void Validar_UsuarioEliminado_DeberiaRetornarSuccess()
-        {
+        public void Validar_UsuarioEliminado_DeberiaRetornarSuccess() {
             // Arrange
             var user = CrearUserValido() with { IsDeleted = true, DeleteAt = DateTime.Today };
 
@@ -134,16 +131,16 @@ public class ValidadorUserTest
     }
 
     [TestFixture]
-    public class CasosNegativos
-    {
+    public class CasosNegativos {
+        [SetUp]
+        public void SetUp() {
+            _validador = new ValidadorUser(new ValidadorAddress(), new ValidadorCompany());
+        }
+
         private ValidadorUser _validador = null!;
 
-        [SetUp]
-        public void SetUp() => _validador = new ValidadorUser(new ValidadorAddress(), new ValidadorCompany());
-
         [Test]
-        public void Validar_IdNegativo_DeberiaRetornarFailure()
-        {
+        public void Validar_IdNegativo_DeberiaRetornarFailure() {
             // Arrange
             var user = CrearUserValido() with { Id = -1 };
 
@@ -159,8 +156,7 @@ public class ValidadorUserTest
         [TestCase("")]
         [TestCase("  ")]
         [TestCase(null)]
-        public void Validar_Name_DeberiaRetornarFailure(string? nombre)
-        {
+        public void Validar_Name_DeberiaRetornarFailure(string? nombre) {
             // Arrange
             var user = CrearUserValido() with { Name = nombre! };
 
@@ -176,8 +172,7 @@ public class ValidadorUserTest
         [TestCase("jorge o")] // Espacio no permitido
         [TestCase("user@correo")] // @ no permitido
         [TestCase("ñandú")] // Acentos no permitidos
-        public void Validar_UserNameFormatoInvalido_DeberiaRetornarFailure(string userName)
-        {
+        public void Validar_UserNameFormatoInvalido_DeberiaRetornarFailure(string userName) {
             // Arrange
             var user = CrearUserValido() with { UserName = userName };
 
@@ -196,8 +191,7 @@ public class ValidadorUserTest
         [TestCase("bret@srav")]
         [TestCase("bret @srav.com")]
         [TestCase("")]
-        public void Validar_EmailInvalido_DeberiaRetornarFailure(string email)
-        {
+        public void Validar_EmailInvalido_DeberiaRetornarFailure(string email) {
             // Arrange
             var user = CrearUserValido() with { Email = email };
 
@@ -215,8 +209,7 @@ public class ValidadorUserTest
         [TestCase("60012345")] // Solo 8 dígitos
         [TestCase("")]
         [TestCase(" ")]
-        public void Validar_TelefonoNoEspanol_DeberiaRetornarFailure(string telefono)
-        {
+        public void Validar_TelefonoNoEspanol_DeberiaRetornarFailure(string telefono) {
             // Arrange
             var user = CrearUserValido() with { Phone = telefono };
 
@@ -232,8 +225,7 @@ public class ValidadorUserTest
         [TestCase("")]
         [TestCase(" ")]
         [TestCase("no es una url")]
-        public void Validar_WebsiteInvalido_DeberiaRetornarFailure(string website)
-        {
+        public void Validar_WebsiteInvalido_DeberiaRetornarFailure(string website) {
             // Arrange
             var user = CrearUserValido() with { Website = website };
 
@@ -247,8 +239,7 @@ public class ValidadorUserTest
         }
 
         [Test]
-        public void Validar_FechaCreacionFutura_DeberiaRetornarFailure()
-        {
+        public void Validar_FechaCreacionFutura_DeberiaRetornarFailure() {
             // Arrange
             var user = CrearUserValido() with { CreateAt = DateTime.Today.AddDays(1) };
 
@@ -262,11 +253,9 @@ public class ValidadorUserTest
         }
 
         [Test]
-        public void Validar_FechaActualizacionAnteriorACreacion_DeberiaRetornarFailure()
-        {
+        public void Validar_FechaActualizacionAnteriorACreacion_DeberiaRetornarFailure() {
             // Arrange
-            var user = CrearUserValido() with
-            {
+            var user = CrearUserValido() with {
                 CreateAt = DateTime.Today.AddDays(-5),
                 UpdateAt = DateTime.Today.AddDays(-10)
             };
@@ -277,12 +266,12 @@ public class ValidadorUserTest
             // Assert
             result.IsFailure.Should().BeTrue();
             var validationError = (Validation)result.Error;
-            validationError.Errors.Should().Contain("La fecha de actualización no puede ser anterior a la de creación.");
+            validationError.Errors.Should()
+                .Contain("La fecha de actualización no puede ser anterior a la de creación.");
         }
 
         [Test]
-        public void Validar_NoEliminadoConDeleteAt_DeberiaRetornarFailure()
-        {
+        public void Validar_NoEliminadoConDeleteAt_DeberiaRetornarFailure() {
             // Arrange
             var user = CrearUserValido() with { IsDeleted = false, DeleteAt = DateTime.Today };
 
@@ -296,8 +285,7 @@ public class ValidadorUserTest
         }
 
         [Test]
-        public void Validar_UserNulo_DeberiaRetornarFailure()
-        {
+        public void Validar_UserNulo_DeberiaRetornarFailure() {
             // Arrange
             User user = null!;
 
@@ -312,11 +300,9 @@ public class ValidadorUserTest
     }
 
     [TestFixture]
-    public class CasosDeDelegacion
-    {
+    public class CasosDeDelegacion {
         [Test]
-        public void Validar_DelegarEnAddressInvalida_DeberiaRetornarFailure()
-        {
+        public void Validar_DelegarEnAddressInvalida_DeberiaRetornarFailure() {
             // Arrange
             var mockAddress = new Mock<IValidador<Address>>();
             mockAddress
@@ -339,8 +325,7 @@ public class ValidadorUserTest
         }
 
         [Test]
-        public void Validar_DelegarEnCompanyInvalida_DeberiaRetornarFailure()
-        {
+        public void Validar_DelegarEnCompanyInvalida_DeberiaRetornarFailure() {
             // Arrange
             var mockCompany = new Mock<IValidador<Company>>();
             mockCompany
@@ -363,8 +348,7 @@ public class ValidadorUserTest
         }
 
         [Test]
-        public void Validar_DelegacionValida_NoDebeReportarErrorDeAnidados()
-        {
+        public void Validar_DelegacionValida_NoDebeReportarErrorDeAnidados() {
             // Arrange
             var mockAddress = new Mock<IValidador<Address>>();
             mockAddress

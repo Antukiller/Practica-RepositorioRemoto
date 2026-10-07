@@ -2,7 +2,7 @@
 
 namespace Practicas_RepositorioRemoto.Dto;
 
-public record UpdateUserRepuest (
+public record UpdateUserRequest (
     int Id,
     string Name,
     string UserName,

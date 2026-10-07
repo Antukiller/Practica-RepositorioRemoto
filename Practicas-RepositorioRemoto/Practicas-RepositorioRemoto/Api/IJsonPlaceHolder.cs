@@ -21,7 +21,7 @@ public interface IJsonPlaceHolder {
     /// <summary>
     /// GET /users/{id} - Obtiene un usuario por su ID.
     /// </summary>    
-    [Get("/users/{Id}")]
+    [Get("/users/{id}")]
     Task<User?> GetUsersByIdAsync(int id);
     
     /// <summary>
@@ -34,13 +34,13 @@ public interface IJsonPlaceHolder {
     /// <summary>
     /// PUT /users/{id} - Actualiza un usuario.
     /// </summary>
-    [Put("/users/{Id}")]
-    Task<User> UpdateUserAsync(int id, [Body] UpdateUserRepuest request);
+    [Put("/users/{id}")]
+    Task<User> UpdateUserAsync(int id, [Body] UpdateUserRequest request);
     
     /// <summary>
     /// Delete /user/{id} Elimina usuario
     /// </summary>
-    [Delete("/users/{Id}")]
+    [Delete("/users/{id}")]
     Task DeleteUserAsync(int id);
     
 }

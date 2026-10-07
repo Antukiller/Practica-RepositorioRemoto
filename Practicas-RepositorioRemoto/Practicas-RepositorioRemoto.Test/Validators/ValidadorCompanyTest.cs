@@ -7,33 +7,36 @@ namespace Practicas_RepositorioRemoto.Test.Validators;
 // ─── VALIDADORCOMPANY TESTS ───────────────────────────────────────────
 
 /// <summary>
-/// Tests for ValidadorCompany covering company name, catch phrase and bs validation rules.
+///     Tests for ValidadorCompany covering company name, catch phrase and bs validation rules.
 /// </summary>
 [TestFixture]
-public class ValidadorCompanyTest
-{
+public class ValidadorCompanyTest {
+    [SetUp]
+    public void SetUp() {
+        _validador = new ValidadorCompany();
+    }
+
     private ValidadorCompany _validador = null!;
 
-    [SetUp]
-    public void SetUp() => _validador = new ValidadorCompany();
-
     /// <summary>Crea una compañía válida que sirve de base para los casos de prueba.</summary>
-    private static Company CrearCompanyValida() => new(
-        Name: "Acme Corp",
-        CatchPhrase: "Slogan de la compañía",
-        Bs: "negocios hodie");
+    private static Company CrearCompanyValida() {
+        return new Company(
+            "Acme Corp",
+            "Slogan de la compañía",
+            "negocios hodie");
+    }
 
     [TestFixture]
-    public class CasosPositivos
-    {
+    public class CasosPositivos {
+        [SetUp]
+        public void SetUp() {
+            _validador = new ValidadorCompany();
+        }
+
         private ValidadorCompany _validador = null!;
 
-        [SetUp]
-        public void SetUp() => _validador = new ValidadorCompany();
-
         [Test]
-        public void Validar_CompanyValido_DeberiaRetornarSuccess()
-        {
+        public void Validar_CompanyValido_DeberiaRetornarSuccess() {
             // Arrange
             var compania = CrearCompanyValida();
 
@@ -46,8 +49,7 @@ public class ValidadorCompanyTest
 
         [TestCase("Acme Corp")]
         [TestCase("A")] // Sin mínimo de caracteres
-        public void Validar_NameNoVacio_DeberiaRetornarSuccess(string nombre)
-        {
+        public void Validar_NameNoVacio_DeberiaRetornarSuccess(string nombre) {
             // Arrange
             var compania = CrearCompanyValida() with { Name = nombre };
 
@@ -60,18 +62,18 @@ public class ValidadorCompanyTest
     }
 
     [TestFixture]
-    public class CasosNegativos
-    {
-        private ValidadorCompany _validador = null!;
-
+    public class CasosNegativos {
         [SetUp]
-        public void SetUp() => _validador = new ValidadorCompany();
+        public void SetUp() {
+            _validador = new ValidadorCompany();
+        }
+
+        private ValidadorCompany _validador = null!;
 
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null)]
-        public void Validar_Name_DeberiaRetornarFailure(string? nombre)
-        {
+        public void Validar_Name_DeberiaRetornarFailure(string? nombre) {
             // Arrange
             var compania = CrearCompanyValida() with { Name = nombre! };
 
@@ -87,8 +89,7 @@ public class ValidadorCompanyTest
 
         [TestCase("")]
         [TestCase("   ")]
-        public void Validar_CatchPhrase_DeberiaRetornarFailure(string catchPhrase)
-        {
+        public void Validar_CatchPhrase_DeberiaRetornarFailure(string catchPhrase) {
             // Arrange
             var compania = CrearCompanyValida() with { CatchPhrase = catchPhrase };
 
@@ -103,8 +104,7 @@ public class ValidadorCompanyTest
 
         [TestCase("")]
         [TestCase(" ")]
-        public void Validar_Bs_DeberiaRetornarFailure(string bs)
-        {
+        public void Validar_Bs_DeberiaRetornarFailure(string bs) {
             // Arrange
             var compania = CrearCompanyValida() with { Bs = bs };
 
@@ -118,8 +118,7 @@ public class ValidadorCompanyTest
         }
 
         [Test]
-        public void Validar_CompanyNulo_DeberiaRetornarFailure()
-        {
+        public void Validar_CompanyNulo_DeberiaRetornarFailure() {
             // Arrange
             Company compania = null!;
 
@@ -133,8 +132,7 @@ public class ValidadorCompanyTest
         }
 
         [Test]
-        public void Validar_TodosLosCamposEnBlanco_DeberiaAcumularTresErrores()
-        {
+        public void Validar_TodosLosCamposEnBlanco_DeberiaAcumularTresErrores() {
             // Arrange
             var compania = new Company("", " ", "");
 

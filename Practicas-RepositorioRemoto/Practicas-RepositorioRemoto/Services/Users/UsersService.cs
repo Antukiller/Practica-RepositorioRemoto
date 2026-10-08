@@ -3,6 +3,7 @@ using System.Text.Json;
 using CSharpFunctionalExtensions;
 using Practicas_RepositorioRemoto.Api;
 using Practicas_RepositorioRemoto.Cache.Common;
+using Practicas_RepositorioRemoto.Config;
 using Practicas_RepositorioRemoto.Dto;
 using Practicas_RepositorioRemoto.Errors;
 using Practicas_RepositorioRemoto.Interfaces;
@@ -26,9 +27,10 @@ namespace Practicas_RepositorioRemoto.Services;
 ///     Flujo de escritura: API REST → BD local → notificación.
 ///     </para>
 ///     <para>
-///     La escritura en caché se produce únicamente en la lectura (patrón cache-aside),
-///     no en las operaciones de creación o actualización.
-///     </para>
+///     La escritura en caché se produce únicamente en la lectura (patrón cache-aside).
+    ///     Una actualización no escribe en caché, pero sí la invalida, para que la siguiente
+    ///     lectura repueble desde la base de datos.
+    ///     </para>
 /// </remarks>
 /// <param name="validador">Validador de reglas de dominio del usuario.</param>
 /// <param name="repository">Repositorio local de usuarios.</param>
@@ -45,9 +47,6 @@ public class UsersService(
 
     private readonly ILogger _logger = Log.ForContext<UsersService>();
 
-    /// <summary>Ruta relativa del fichero generado por la exportación.</summary>
-    private const string RutaExportacion = "users-export.json";
-
     /// <inheritdoc cref="IUserService.GetAllAsync"/>
     public async Task<IEnumerable<User>> GetAllAsync() {
         var locales = await repository.GetAllAsync();
@@ -56,7 +55,7 @@ public class UsersService(
         var remotos = await api.GetUsersAsync();
 
         foreach (var usuario in remotos) {
-            var guardado = await repository.CreateAsync(usuario);
+            var guardado = await repository.CreateAsync(DesdeApi(usuario));
             if (guardado.IsFailure) {
                 _logger.Warning("No se pudo guardar el usuario {Id}: {Error}",
                     usuario.Id, guardado.Error);
@@ -65,6 +64,9 @@ public class UsersService(
 
         return remotos;
     }
+
+    /// <inheritdoc cref="IUserService.ExportAsync"/>
+    public Task<Result<string, DomainError>> ExportAsync() => ExportToJsonAsync();
 
     /// <inheritdoc cref="IUserService.GetByIdAsync"/>
     public async Task<Result<User, DomainError>> GetByIdAsync(int id) {
@@ -83,7 +85,7 @@ public class UsersService(
                 return Result.Failure<User, DomainError>(new DomainError.NotFound("User", id));
             }
 
-            var guardado = await repository.CreateAsync(remoto);
+            var guardado = await repository.CreateAsync(DesdeApi(remoto));
             if (guardado.IsFailure) {
                 return Result.Failure<User, DomainError>(guardado.Error);
             }
@@ -107,6 +109,10 @@ public class UsersService(
 
     /// <inheritdoc cref="IUserService.CreateAsync"/>
     public async Task<Result<User, DomainError>> CreateAsync(CreateUserRequest request) {
+        if (request is null)
+            return Result.Failure<User, DomainError>(new DomainError.ValidationError(
+                nameof(request), "La petición de creación no puede ser nula."));
+
         var usuario = request.ToModel();
 
         var validacion = validador.Validar(usuario);
@@ -138,6 +144,10 @@ public class UsersService(
 
     /// <inheritdoc cref="IUserService.UpdateAsync"/>
     public async Task<Result<User, DomainError>> UpdateAsync(int id, UpdateUserRequest request) {
+        if (request is null)
+            return Result.Failure<User, DomainError>(new DomainError.ValidationError(
+                nameof(request), "La petición de actualización no puede ser nula."));
+
         if (id != request.Id) {
             return Result.Failure<User, DomainError>(new DomainError.ValidationError(
                 "Id",
@@ -160,6 +170,7 @@ public class UsersService(
                 return Result.Failure<User, DomainError>(guardado.Error);
             }
 
+            await cache.RemoveAsync(GetKeyUser(id));
             notificationService.NotificarActualizado(id);
             return Result.Success<User, DomainError>(guardado.Value);
         }
@@ -208,18 +219,21 @@ public class UsersService(
     /// </summary>
     /// <returns>Ruta absoluta del fichero generado o un error.</returns>
     /// <remarks>
-    ///     Método privado. Ningún consumidor lo invoca todavía: el endpoint
-    ///     GET /api/users/export se montará cuando exista Program.cs.
+    ///     La llamada pública entra por <see cref="ExportAsync"/>; los usuarios se obtienen
+    ///     mediante <see cref="GetAllAsync"/> para conservar el flujo local/API del servicio.
+    ///     El fichero se escribe en <see cref="DatabaseConfig.UsersJsonPath"/>, de modo que
+    ///     el consumidor y el servicio apuntan siempre al mismo sitio.
     /// </remarks>
     private async Task<Result<string, DomainError>> ExportToJsonAsync() {
         try {
-            var usuarios = await repository.GetAllAsync();
+            var usuarios = await GetAllAsync();
 
             var json = JsonSerializer.Serialize(usuarios, new JsonSerializerOptions {
                 WriteIndented = true
             });
 
-            var ruta = Path.GetFullPath(RutaExportacion);
+            var ruta = DatabaseConfig.UsersJsonPath;
+            Directory.CreateDirectory(Path.GetDirectoryName(ruta)!);
             await File.WriteAllTextAsync(ruta, json);
 
             return Result.Success<string, DomainError>(ruta);
@@ -256,6 +270,23 @@ public class UsersService(
             return Result.Failure<User, DomainError>(new DomainError.NotFound("User", id));
         }
     }
+
+    /// <summary>
+    ///     Normaliza un usuario devuelto por la API REST antes de persistirlo.
+    /// </summary>
+    /// <remarks>
+    ///     La API no devuelve los campos de auditoría, por lo que Refit los deja en
+    ///     <c>default</c>. Sin esta normalización la base de datos local guardaría
+    ///     <c>0001-01-01</c> en <c>CreateAt</c>.
+    /// </remarks>
+    /// <param name="usuario">Usuario tal y como lo devuelve la API.</param>
+    /// <returns>El mismo usuario con los campos de auditoría inicializados.</returns>
+    private static User DesdeApi(User usuario) => usuario with {
+        CreateAt = DateTime.UtcNow,
+        UpdateAt = default,
+        DeleteAt = default,
+        IsDeleted = false
+    };
 
     /// <summary>
     ///     Devuelve la clave de caché asociada al usuario con el id indicado.

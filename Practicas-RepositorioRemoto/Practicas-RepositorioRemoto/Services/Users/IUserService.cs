@@ -14,6 +14,12 @@ public interface IUserService {
     Task<IEnumerable<User>> GetAllAsync();
 
     /// <summary>
+    ///     Obtiene los usuarios usando el flujo normal del servicio y los exporta a JSON.
+    /// </summary>
+    /// <returns>La ruta absoluta del archivo generado o un error.</returns>
+    Task<Result<string, DomainError>> ExportAsync();
+
+    /// <summary>
     ///     Busca un usuario en caché, base de datos y API, en ese orden.
     /// </summary>
     /// <param name="id">Identificador del usuario.</param>

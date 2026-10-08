@@ -14,13 +14,16 @@ public static class UsersMapper {
             Phone = dto.Phone,
             Website = dto.Website,
             Company = dto.Company.ToModel(),
+            CreateAt = DateTime.UtcNow,
             UpdateAt = DateTime.UtcNow,
+            DeleteAt = default,
+            IsDeleted = false
 
         };
     }
     public static User ToModel(this UpdateUserRequest dto) {
         return new User {
-            Id = 0,
+            Id = dto.Id,
             Name = dto.Name,
             UserName = dto.UserName,
             Email = dto.Email,

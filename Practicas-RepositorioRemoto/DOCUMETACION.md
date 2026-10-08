@@ -302,6 +302,7 @@ classDiagram
         +DeleteAsync(int) Result
         +DeleteAllAsync() Result
     }
+
     class ICrudRepository {
         <<interface>>
         +GetAllAsync()
@@ -310,6 +311,7 @@ classDiagram
         +UpdateAsync(int, User)
         +DeleteAsync(int)
     }
+
     class IUserService {
         <<interface>>
         +GetAllAsync() Task
@@ -319,6 +321,7 @@ classDiagram
         +DeleteAsync(int)
         +ExportAsync() Result
     }
+
     class UsersService {
         +GetAllAsync()
         +GetByIdAsync(int)
@@ -326,11 +329,13 @@ classDiagram
         +UpdateAsync(int, UpdateUserRequest)
         +DeleteAsync(int)
     }
+
     class BackgroundService {
         +StartAsync(CancellationToken)
         -Synchronize()
         -SynchronizeSafely()
     }
+
     class ICache {
         <<interface>>
         +GetAsync(key)
@@ -340,25 +345,30 @@ classDiagram
         +AddToIndexAsync(key)
         +GetIndexedKeysAsync()
     }
+
     class MemCache {
         +GetAsync(key)
         +SetAsync(key, value)
         +RemoveAsync(key)
         +RemoveAllAsync()
     }
+
     class RedisCache {
         +GetAsync(key)
         +SetAsync(key, value)
         +RemoveAsync(key)
         +RemoveAllAsync()
     }
-    class IValidador {
+
+    class IValidador~T~ {
         <<interface>>
-        +Validar(T) Result
+        +Validar(T entidad) Result
     }
+
     class ValidadorUser
     class ValidadorAddress
     class ValidadorCompany
+
     class IJsonPlaceHolder {
         <<interface>>
         +GetUsersAsync()
@@ -367,13 +377,16 @@ classDiagram
         +UpdateUserAsync(int, UpdateUserRequest)
         +DeleteUserAsync(int)
     }
+
     class INotificationService {
         <<interface>>
         +NotificarCreado(int)
         +NotificarActualizado(int)
         +NotificarEliminado(int)
     }
+
     class ConsoleNotificationService
+
     class User {
         +int Id
         +string Name
@@ -388,6 +401,7 @@ classDiagram
         +DateTime DeleteAt
         +bool IsDeleted
     }
+
     class Address {
         +string Street
         +string Suite
@@ -395,10 +409,12 @@ classDiagram
         +string ZipCode
         +Geo Geo
     }
+
     class Geo {
         +string Lat
         +string Lng
     }
+
     class Company {
         +string Name
         +string CatchPhrase
@@ -411,12 +427,12 @@ classDiagram
     MemCache ..|> ICache
     RedisCache ..|> ICache
     UsersService ..|> IUserService
-    ValidadorUser ..|> IValidador
-    ValidadorAddress ..|> IValidador
-    ValidadorCompany ..|> IValidador
+    ValidadorUser ..|> IValidador~T~
+    ValidadorAddress ..|> IValidador~T~
+    ValidadorCompany ..|> IValidador~T~
     ConsoleNotificationService ..|> INotificationService
 
-    UsersService --> IValidador
+    UsersService --> IValidador~T~
     UsersService --> IUserRepository
     UsersService --> ICache
     UsersService --> INotificationService
@@ -610,14 +626,10 @@ sequenceDiagram
 
 ## 12. Anexos
 
-**A. Enlace al Vídeo de Presentación**
-
-`<URL_DEL_VIDEO_A_RELLENAR>` *(si existe un vídeo, sustituir este marcador)*
-
-**B. Enlace al Repositorio**
+**Enlace al Repositorio**
 
 https://github.com/Antukiller/Practica-RepositorioRemoto
 
 ---
 
-*Documento generado a partir de la estructura de GestionITV Pro, adaptada al proyecto **Practicas Repositorio Remoto** — Antoine Amir López Jauregui.*
+*Documento generado al proyecto **Practicas Repositorio Remoto** — Diego Gónzalez Manzanero / Antoine Amir López Jauregui*

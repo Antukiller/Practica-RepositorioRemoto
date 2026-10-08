@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Practicas_RepositorioRemoto.Api;
 using Practicas_RepositorioRemoto.Cache.Common;
+using Practicas_RepositorioRemoto.Config;
 using Practicas_RepositorioRemoto.Interfaces;
 using Practicas_RepositorioRemoto.Repository;
 using Serilog;
@@ -15,12 +16,12 @@ public class BackgroundService(IServiceScopeFactory scopeFactory) : ISingletonSe
     private readonly ILogger _logger = Log.ForContext<BackgroundService>();
 
     /// <summary>
-    /// Inicia el bucle de sincronización periódica cada 60 segundos.
+    /// Inicia el bucle de sincronización periódica con el intervalo configurado.
     /// </summary>
     /// <param name="cancellationToken">Token para cancelar la ejecución del servicio.</param>
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(60));
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(DatabaseConfig.SincronizacionSegundos));
 
         while (!cancellationToken.IsCancellationRequested && await timer.WaitForNextTickAsync(cancellationToken))
         {

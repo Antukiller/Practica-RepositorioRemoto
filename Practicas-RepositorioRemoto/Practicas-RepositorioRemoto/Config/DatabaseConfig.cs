@@ -10,12 +10,16 @@ public static class DatabaseConfig {
     public static IConfiguration Config { get; private set; } = null!;
 
     public static void Init(string[] args) {
-        var entorno = args.Length > 0 ? args[0] : "Development";
+        var archivoConfiguracion = (args.FirstOrDefault() ?? "Development").ToLowerInvariant() switch {
+            "development" => "appsettings.Development.json",
+            "production" => "appsettings.Production.json",
+            var entorno => throw new ArgumentException($"Entorno de configuración no soportado: {entorno}.", nameof(args))
+        };
 
         Config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile(
-                $"appsettings.{entorno.ToLowerInvariant()}.json",
+                archivoConfiguracion,
                 false,
                 true
             )
@@ -59,7 +63,7 @@ public static class DatabaseConfig {
     /// <summary>
     /// Obtiene la sincronizacion
     /// </summary>
-    public static int CacheSincronizacion => Config.GetValue("Cache:Sincronización", 60);
+    public static int SincronizacionSegundos => Config.GetValue("BackgroundService:Sincronizacion", 60);
     
     /// <summary>
     /// Obtiene la ruta de la carpeta data

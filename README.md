@@ -1,7 +1,7 @@
 # 6. PRACTICA REPOSITORIO-REMOTO
 
 ## INTEGRANTES
--Diego Gonzalez Manzanero / Antoine Lopez Amir
+-Diego Gónzalez Manzanero / Antoine Amir López Jauregui
 
 ## 1. INTRODUCCION Y OBJETIVOS
 

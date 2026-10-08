@@ -295,14 +295,14 @@ classDiagram
 
     class IUserRepository {
         <<interface>>
-        +GetAllAsync() Task~IEnumerable~User~~
-        +GetByIdAsync(int) Result~User, DomainError~
-        +CreateAsync(User) Result~User, DomainError~
-        +UpdateAsync(int, User) Result~User, DomainError~
-        +DeleteAsync(int) Result~User, DomainError~
-        +DeleteAllAsync() Result~int, DomainError~
+        +GetAllAsync() Task
+        +GetByIdAsync(int) Result
+        +CreateAsync(User) Result
+        +UpdateAsync(int, User) Result
+        +DeleteAsync(int) Result
+        +DeleteAllAsync() Result
     }
-    class ICrudRepository~int, User~ {
+    class ICrudRepository {
         <<interface>>
         +GetAllAsync()
         +GetByIdAsync(int)
@@ -312,12 +312,12 @@ classDiagram
     }
     class IUserService {
         <<interface>>
-        +GetAllAsync() Task~IEnumerable~User~~
-        +GetByIdAsync(int) Result~User, DomainError~
+        +GetAllAsync() Task
+        +GetByIdAsync(int) Result
         +CreateAsync(CreateUserRequest)
         +UpdateAsync(int, UpdateUserRequest)
         +DeleteAsync(int)
-        +ExportAsync() Result~string, DomainError~
+        +ExportAsync() Result
     }
     class UsersService {
         +GetAllAsync()
@@ -333,43 +333,42 @@ classDiagram
     }
     class ICache {
         <<interface>>
-        +GetAsync~T~(key)
-        +SetAsync~T~(key, value, expiration)
+        +GetAsync(key)
+        +SetAsync(key, value, expiration)
         +RemoveAsync(key)
         +RemoveAllAsync()
         +AddToIndexAsync(key)
         +GetIndexedKeysAsync()
     }
     class MemCache {
-        +GetAsync~T~(key)
-        +SetAsync~T~(key, value)
+        +GetAsync(key)
+        +SetAsync(key, value)
         +RemoveAsync(key)
         +RemoveAllAsync()
     }
     class RedisCache {
-        +GetAsync~T~(key)
-        +SetAsync~T~(key, value)
+        +GetAsync(key)
+        +SetAsync(key, value)
         +RemoveAsync(key)
         +RemoveAllAsync()
     }
-    class IValidador~T~ {
+    class IValidador {
         <<interface>>
-        +Validar(T) Result~T, DomainError~
+        +Validar(T) Result
     }
     class ValidadorUser
     class ValidadorAddress
     class ValidadorCompany
     class IJsonPlaceHolder {
         <<interface>>
-        +GetUsersAsync() List~User~
-        +GetUsersByIdAsync(int) User
-        +CreateUserAsync(CreateUserRequest) User
-        +UpdateUserAsync(int, UpdateUserRequest) User
+        +GetUsersAsync()
+        +GetUsersByIdAsync(int)
+        +CreateUserAsync(CreateUserRequest)
+        +UpdateUserAsync(int, UpdateUserRequest)
         +DeleteUserAsync(int)
     }
     class INotificationService {
         <<interface>>
-        +Observable IObservable~Notification~
         +NotificarCreado(int)
         +NotificarActualizado(int)
         +NotificarEliminado(int)
@@ -416,7 +415,6 @@ classDiagram
     ValidadorAddress ..|> IValidador
     ValidadorCompany ..|> IValidador
     ConsoleNotificationService ..|> INotificationService
-    IJsonPlaceHolder ..> JP["JSONPlaceholder (Refit)"]
 
     UsersService --> IValidador
     UsersService --> IUserRepository
@@ -430,7 +428,6 @@ classDiagram
     User *-- Address
     User *-- Company
     Address *-- Geo
-    UserDto ..> User : "mappers"
 ```
 
 ---

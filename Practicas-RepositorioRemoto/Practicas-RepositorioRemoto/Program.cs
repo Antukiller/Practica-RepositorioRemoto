@@ -609,7 +609,7 @@ public class Program {
         Console.WriteLine($"Caché:       {DatabaseConfig.CacheName}");
         Console.WriteLine($"API:         {DatabaseConfig.BaseUrl}");
         Console.WriteLine($"BD local:    {DatabaseConfig.DataFolder}");
-        Console.WriteLine($"Tiempo de sincronización: {DatabaseConfig.CacheSincronizacion}s");
+        Console.WriteLine($"Tiempo de sincronización: {DatabaseConfig.SincronizacionSegundos}s");
     }
 
     /// <summary>Muestra el resumen final de todas las pruebas.</summary>

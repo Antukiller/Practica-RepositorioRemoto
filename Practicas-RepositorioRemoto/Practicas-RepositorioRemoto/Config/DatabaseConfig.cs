@@ -46,9 +46,12 @@ public static class DatabaseConfig {
     /// <summary>
     /// Obtiene la cadena de conexion
     /// </summary>
-    public static string DbConnection => 
-        Config.GetValue<string>("Repository:ConnectionString") ?? 
-        throw new InvalidOperationException("Falta Repository:ConnectionString en la configuración.");
+    public static string DbConnection =>
+        RepositoryName.Equals("SQLite", StringComparison.OrdinalIgnoreCase)
+            ? $"Data Source={Path.Combine(DataFolder, "usuario.db")}"
+            : Config.GetValue<string>("Repository:ConnectionString")
+              ?? throw new InvalidOperationException(
+                  "Falta Repository:ConnectionString en la configuración.");
     
     /// <summary>
     /// Obtiene el tipo de cachee
